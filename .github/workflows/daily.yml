@@ -2,7 +2,7 @@ name: Squash Value Bot (Daily)
 
 on:
   schedule:
-    - cron: "0 9 * * *"   # 09:00 UTC cada día
+    - cron: "20 20 * * *"   # 09:00 UTC cada día
   workflow_dispatch:
 
 jobs:
