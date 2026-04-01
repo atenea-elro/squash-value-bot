@@ -1,0 +1,43 @@
+name: Squash Value Bot (Daily)
+
+on:
+  schedule:
+    - cron: "0 9 * * *"   # 09:00 UTC cada día
+  workflow_dispatch:
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run bot
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          SPORT_KEY: ${{ vars.SPORT_KEY }}
+          ODDS_REGIONS: ${{ vars.ODDS_REGIONS }}
+          ODDS_MARKETS: ${{ vars.ODDS_MARKETS }}
+          EDGE_MIN: ${{ vars.EDGE_MIN }}
+          MAX_PICKS: ${{ vars.MAX_PICKS }}
+          SIM_N: ${{ vars.SIM_N }}
+          K_FORM: ${{ vars.K_FORM }}
+          K_FATIGA: ${{ vars.K_FATIGA }}
+          K_H2H: ${{ vars.K_H2H }}
+          SEND_IF_NO_PICKS: ${{ vars.SEND_IF_NO_PICKS }}
+        run: |
+          python main.py
